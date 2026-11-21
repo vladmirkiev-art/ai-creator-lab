@@ -4,116 +4,155 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101827">
+  <meta name="description" content="Prompt Lab — рабочее пространство AI Creator для создания и подготовки промптов.">
   <title>Prompt Lab — AI Creator</title>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #0b1220;
-      --panel: #121d2e;
-      --panel-2: #18263a;
-      --text: #edf3fb;
-      --muted: #9aabc0;
-      --accent: #79a9ff;
-      --border: #2a3b53;
+      --bg:#0b1220; --panel:#121d2e; --panel2:#18263a; --text:#edf3fb;
+      --muted:#9aabc0; --accent:#79a9ff; --border:#2a3b53; --good:#9ed9b3;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh; padding: 32px 18px;
-      background: radial-gradient(ellipse at top, #1b3150 0, var(--bg) 58%);
-      color: var(--text); font: 16px/1.5 system-ui, -apple-system, Segoe UI, sans-serif;
-    }
-    main { width: min(820px, 100%); margin: 0 auto; }
-    header { margin: 12px 0 28px; }
-    .eyebrow { color: var(--accent); font-size: .78rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-    h1 { margin: 8px 0; font-size: clamp(2rem, 7vw, 3.2rem); line-height: 1.08; }
-    .intro { color: var(--muted); max-width: 600px; }
-    .card { background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--border); border-radius: 18px; padding: clamp(18px, 4vw, 28px); box-shadow: 0 18px 60px #0005; }
-    label { display: block; margin-bottom: 10px; font-weight: 650; }
-    textarea {
-      display: block; width: 100%; min-height: 280px; resize: vertical;
-      padding: 16px; border: 1px solid var(--border); border-radius: 12px;
-      background: #0b1422; color: var(--text); font: inherit; font-size: 15px; line-height: 1.6;
-      outline: none;
-    }
-    textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #79a9ff22; }
-    .meta { display: flex; justify-content: space-between; gap: 12px; margin: 10px 2px 20px; color: var(--muted); font-size: .88rem; }
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
-    button {
-      border: 1px solid var(--border); border-radius: 10px; padding: 11px 17px;
-      color: var(--text); background: var(--panel-2); font: inherit; font-weight: 650;
-      cursor: pointer; transition: transform .15s, border-color .15s;
-    }
-    button:hover { border-color: var(--accent); transform: translateY(-1px); }
-    button.primary { background: var(--accent); color: #081426; border-color: var(--accent); }
-    button:focus-visible { outline: 3px solid #79a9ff88; outline-offset: 2px; }
-    #status { min-height: 24px; margin: 14px 2px 0; color: #9ed9b3; font-size: .9rem; }
-    footer { margin: 20px 4px; color: var(--muted); font-size: .82rem; text-align: center; }
-    @media (max-width: 520px) {
-      body { padding: 18px 12px; }
-      .actions button { flex: 1 1 100%; }
-      textarea { min-height: 240px; }
-    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;padding:28px 16px;background:radial-gradient(ellipse at top,#1b3150 0,var(--bg) 60%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+    main{width:min(980px,100%);margin:auto}
+    header{margin:8px 0 24px}
+    .eyebrow{color:var(--accent);font-size:.76rem;font-weight:750;letter-spacing:.15em;text-transform:uppercase}
+    h1{margin:7px 0;font-size:clamp(2rem,6vw,3rem);line-height:1.08}
+    .intro{max-width:680px;color:var(--muted);margin:10px 0}
+    .layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+    .card{min-width:0;background:color-mix(in srgb,var(--panel) 95%,transparent);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:0 18px 50px #0003}
+    h2{font-size:1.08rem;margin:0 0 16px}
+    label{display:block;font-weight:650;margin:13px 0 6px}
+    input,select,textarea{width:100%;border:1px solid var(--border);border-radius:10px;background:#0b1422;color:var(--text);font:inherit;padding:11px 12px;outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px #79a9ff20}
+    textarea{min-height:220px;resize:vertical;line-height:1.6}
+    #result{min-height:360px}
+    .hint{color:var(--muted);font-size:.82rem;margin:6px 0}
+    .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
+    button{border:1px solid var(--border);border-radius:10px;padding:10px 14px;background:var(--panel2);color:var(--text);font:inherit;font-weight:650;cursor:pointer}
+    button:hover{border-color:var(--accent)}
+    button.primary{background:var(--accent);color:#081426;border-color:var(--accent)}
+    #status{min-height:24px;color:var(--good);font-size:.88rem;margin:12px 2px 0}
+    .counter{display:flex;justify-content:space-between;color:var(--muted);font-size:.82rem;margin-top:7px}
+    footer{text-align:center;color:var(--muted);font-size:.8rem;margin:20px 0}
+    @media(max-width:720px){body{padding:18px 12px}.layout{grid-template-columns:1fr}.card{padding:16px}#result{min-height:260px}}
   </style>
 </head>
 <body>
-  <main>
-    <header>
-      <div class="eyebrow">AI Creator · Workshop 01</div>
-      <h1>Prompt Lab</h1>
-      <p class="intro">Простое рабочее пространство для написания и подготовки промптов к генерации изображений и видео.</p>
-    </header>
+<main>
+  <header>
+    <div class="eyebrow">AI Creator · Workshop 01</div>
+    <h1>Prompt Lab</h1>
+    <p class="intro">Конструктор промптов для изображений и видео. Заполни нужные поля, собери черновик и отредактируй результат перед копированием.</p>
+  </header>
 
-    <section class="card" aria-labelledby="prompt-label">
-      <label id="prompt-label" for="prompt">Твой промпт</label>
-      <textarea id="prompt" placeholder="Опиши сцену, персонажа, движение камеры, освещение и желаемый результат…"></textarea>
-      <div class="meta">
-        <span id="counter" aria-live="polite">0 символов</span>
-        <span>Текст остаётся в этом поле</span>
+  <div class="layout">
+    <section class="card" aria-labelledby="builder-title">
+      <h2 id="builder-title">1. Конструктор</h2>
+      <label for="task">Тип задачи</label>
+      <select id="task">
+        <option value="Изображение">Изображение</option>
+        <option value="Видео">Видео</option>
+      </select>
+
+      <label for="subject">Главный объект / персонаж</label>
+      <input id="subject" placeholder="Например: пожилой рыбак в украинской рубахе">
+
+      <label for="action">Действие / поза</label>
+      <input id="action" placeholder="Что происходит в кадре?">
+
+      <label for="scene">Окружение / место действия</label>
+      <input id="scene" placeholder="Где происходит сцена?">
+
+      <label for="camera">Камера / композиция</label>
+      <input id="camera" placeholder="Например: полный рост, средний план, плавный наезд">
+
+      <label for="light">Освещение</label>
+      <input id="light" placeholder="Например: мягкий утренний свет">
+
+      <label for="style">Стиль / визуальная подача</label>
+      <input id="style" placeholder="Например: кинематографичный фотореализм">
+
+      <label for="format">Формат кадра</label>
+      <select id="format">
+        <option value="">Не указывать</option>
+        <option value="9:16, вертикальный формат">9:16 — вертикальный</option>
+        <option value="16:9, горизонтальный формат">16:9 — горизонтальный</option>
+        <option value="1:1, квадратный формат">1:1 — квадратный</option>
+        <option value="3:4, вертикальный формат">3:4 — портретный</option>
+      </select>
+
+      <label for="limits">Важные ограничения</label>
+      <textarea id="limits" rows="3" placeholder="Например: сохранить лицо и одежду без изменений; не добавлять текст и логотипы."></textarea>
+      <div class="actions">
+        <button class="primary" id="build" type="button">Собрать промпт</button>
+        <button id="reset" type="button">Очистить поля</button>
       </div>
+    </section>
+
+    <section class="card" aria-labelledby="result-title">
+      <h2 id="result-title">2. Готовый промпт</h2>
+      <textarea id="result" placeholder="Здесь появится собранный промпт. Его можно редактировать вручную."></textarea>
+      <div class="counter"><span id="counter">0 символов</span><span>Текст можно изменить</span></div>
       <div class="actions">
         <button class="primary" id="copy" type="button">Копировать промпт</button>
-        <button id="clear" type="button">Очистить поле</button>
+        <button id="clear-result" type="button">Очистить результат</button>
       </div>
       <p id="status" role="status" aria-live="polite"></p>
     </section>
-
-    <footer>Prompt Lab · Первая версия · AI Creator Lab</footer>
-  </main>
-  <script>
-    const promptField = document.querySelector("#prompt");
-    const counter = document.querySelector("#counter");
-    const status = document.querySelector("#status");
-
-    function updateCounter() {
-      const count = promptField.value.length;
-      counter.textContent = count.toLocaleString("ru-RU") + " " +
-        (count === 1 ? "символ" : count > 1 && count < 5 ? "символа" : "символов");
-    }
-
-    promptField.addEventListener("input", updateCounter);
-
-    document.querySelector("#copy").addEventListener("click", async () => {
-      if (!promptField.value.trim()) {
-        status.textContent = "Сначала напиши промпт.";
-        return;
-      }
-      try {
-        await navigator.clipboard.writeText(promptField.value);
-        status.textContent = "Промпт скопирован.";
-      } catch {
-        promptField.select();
-        status.textContent = "Автокопирование недоступно. Выдели текст и скопируй его вручную.";
-      }
-    });
-
-    document.querySelector("#clear").addEventListener("click", () => {
-      promptField.value = "";
-      updateCounter();
-      status.textContent = "Поле очищено.";
-      promptField.focus();
-    });
-
+  </div>
+  <footer>Prompt Lab · AI Creator Lab · Рабочая версия для тестирования</footer>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const fields = ["task","subject","action","scene","camera","light","style","format","limits"];
+  function value(id){return $(id).value.trim();}
+  function buildPrompt(){
+    const parts = [];
+    const task = value("task");
+    const subject = value("subject");
+    const action = value("action");
+    const scene = value("scene");
+    const camera = value("camera");
+    const light = value("light");
+    const style = value("style");
+    const format = value("format");
+    const limits = value("limits");
+    if(subject) parts.push(subject + ".");
+    if(action) parts.push("Действие: " + action + ".");
+    if(scene) parts.push("Окружение: " + scene + ".");
+    if(camera) parts.push("Камера и композиция: " + camera + ".");
+    if(light) parts.push("Освещение: " + light + ".");
+    if(style) parts.push("Визуальный стиль: " + style + ".");
+    if(format) parts.push("Формат: " + format + ".");
+    if(limits) parts.push("Ограничения и требования: " + limits);
+    if(parts.length === 0){ $("status").textContent = "Заполни хотя бы одно поле конструктора."; return; }
+    const prefix = task === "Видео" ? "Создай видео." : "Создай изображение.";
+    $("result").value = prefix + "\n\n" + parts.join("\n");
     updateCounter();
-  </script>
+    $("status").textContent = "Черновик собран. Проверь формулировки перед использованием.";
+  }
+  function updateCounter(){
+    const n = $("result").value.length;
+    const word = n % 10 === 1 && n % 100 !== 11 ? "символ" : (n % 10 >= 2 && n % 10 <= 4 && !(n % 100 >= 12 && n % 100 <= 14) ? "символа" : "символов");
+    $("counter").textContent = n.toLocaleString("ru-RU") + " " + word;
+  }
+  $("build").addEventListener("click",buildPrompt);
+  $("result").addEventListener("input",updateCounter);
+  $("reset").addEventListener("click",()=>{
+    fields.forEach(id=>$(id).value = id === "task" ? "Изображение" : "");
+    $("status").textContent = "Поля конструктора очищены.";
+  });
+  $("clear-result").addEventListener("click",()=>{
+    $("result").value = ""; updateCounter(); $("status").textContent = "Результат очищен.";
+  });
+  $("copy").addEventListener("click",async()=>{
+    const text = $("result").value;
+    if(!text.trim()){$("status").textContent = "Сначала собери или введи промпт.";return;}
+    try{await navigator.clipboard.writeText(text);$("status").textContent = "Промпт скопирован.";}
+    catch{$("result").select();$("status").textContent = "Автокопирование недоступно. Выдели текст и скопируй вручную.";}
+  });
+  updateCounter();
+</script>
 </body>
 </html>
